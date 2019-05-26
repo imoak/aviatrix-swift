@@ -12,9 +12,15 @@ import Foundation
 class Aviatrix {
     
     var running = false
-    var author:String
-    init(author:String) {
-        self.author = author
+    var distanceTraveled = 0
+    var maxFuel = 5000.0
+    var fuelLevel = 5000.0
+    var milesPerGallon = 0.4
+    var fuelCost = 0.0
+    var author = ""
+    
+    init(authorName : String) {
+        author = authorName
     }
     
     func start() -> Bool {
@@ -22,12 +28,17 @@ class Aviatrix {
         return running
     }
     
-    func refuel() {
-        
+    func refuel() -> Double {
+        let refuelAmount = maxFuel - fuelLevel
+        fuelCost += refuelAmount*data.fuelPrices[location]!
+        fuelLevel = 5000.0
+        return refuelAmount
     }
     
     func flyTo(destination : String) {
+        distanceTraveled += distanceTo(area: location, target: destination)
         location = destination
+        fuelLevel -= Double(distanceTraveled)*milesPerGallon
     }
     
     var data = AviatrixData()
